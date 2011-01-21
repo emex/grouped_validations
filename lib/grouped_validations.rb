@@ -10,9 +10,11 @@ module GroupedValidations
       end
 
       self.validation_groups ||= []
-      self.validation_groups << group
 
-      define_group_validation_callbacks group
+      unless self.validation_groups.member?(group)
+        self.validation_groups << group
+        define_group_validation_callbacks(group)
+      end
 
       @current_validation_group = group
       class_eval &block

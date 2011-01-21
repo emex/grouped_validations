@@ -8,11 +8,14 @@ module GroupedValidations
 
     def validate_with_groups(*args, &block)
       if @current_validation_group
-        options = args.last
-        if options.is_a?(Hash) && options.key?(:on)
-          options[:if] = Array(options[:if])
-          options[:if] << "self.validation_context == :#{options[:on]}"
+        options = args.extract_options!
+        if options.key?(:on)
+          options = options.dup
+          options[:if] = Array.wrap(options[:if])
+          # Did have self.validation_context
+          options[:if] << "validation_context == :#{options[:on]}"
         end
+        args << options
         set_callback(:"validate_#{@current_validation_group}", *args, &block)
       else
         validate_without_groups(*args, &block)
