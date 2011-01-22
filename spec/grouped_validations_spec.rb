@@ -77,6 +77,49 @@ describe GroupedValidations do
     p.should have(3).errors
   end
 
+  context "calling valid? with a block determining the default validation group" do
+    before do
+      Person.class_eval do
+        validation_group :first_name_group do
+          validates_presence_of :first_name
+        end
+        validation_group :last_name_group do
+          validates_presence_of :last_name
+        end
+
+        validates_presence_of :sex
+      end
+    end
+    
+    it "should only validate the groups specified" do
+      Person.default_validation_group { [:first_name_group, :last_name_group] }
+      p = Person.new
+      p.valid?
+      p.should have(2).errors
+    end
+    
+    it "should not validate any groups if passed special symbol :global" do
+      Person.default_validation_group { :global }
+      p = Person.new
+      p.valid?
+      p.should have(1).errors
+    end
+    
+    it "should run all validations if passed special symbol :all" do
+      Person.default_validation_group { :all }
+      p = Person.new
+      p.valid?
+      p.should have(3).errors
+    end
+    
+    it "should not run any validations if passed a blank/nil result" do
+      Person.default_validation_group { nil }
+      p = Person.new
+      p.valid?
+      p.should have(0).errors
+    end
+  end
+
   it "should respect :on => :create validation option" do
     Person.validation_group :name do
       validates_presence_of :first_name, :on => :create
