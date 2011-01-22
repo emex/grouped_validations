@@ -98,6 +98,13 @@ describe GroupedValidations do
       p.should have(2).errors
     end
     
+    it "should pass the model instance to #default_validation_group to allow dynamic validation groups" do
+      Person.default_validation_group { |person| person.sex == 1 ? :first_name_group : nil }
+      p = Person.new(:sex => 1)
+      p.valid?
+      p.should have(1).errors
+    end
+    
     it "should not validate any groups if passed special symbol :global" do
       Person.default_validation_group { :global }
       p = Person.new
