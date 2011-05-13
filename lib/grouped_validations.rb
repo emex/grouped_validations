@@ -44,6 +44,7 @@ module GroupedValidations
     end
 
     def valid_with_groups?(context=nil)
+      errors.clear
       groups = validation_group_selector ? validation_group_selector.call(self) : :all
       groups_valid_with_context?(groups, context)
     end

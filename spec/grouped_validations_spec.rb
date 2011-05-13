@@ -125,6 +125,18 @@ describe GroupedValidations do
       p.valid?
       p.should have(0).errors
     end
+
+    it "should clear errors when valid? is called many times" do
+        Person.default_validation_group { :first_name_group }
+        Person.validation_group :name do
+            validates_presence_of :first_name
+        end
+
+        p = Person.new
+        p.valid?
+        p.valid?
+        p.errors[:first_name].should have(1).errors
+    end
   end
 
   it "should respect :on => :create validation option" do
@@ -178,4 +190,16 @@ describe GroupedValidations do
     p.should have(2).errors
   end
 
+  it "should clear errors when valid? is called many times" do
+    Person.class_eval do
+      validation_group :name do
+        validates_presence_of :first_name
+      end
+    end
+
+    p = Person.new
+    p.valid?(:name)
+    p.valid?(:name)
+    p.errors[:first_name].should have(1).errors
+  end
 end
