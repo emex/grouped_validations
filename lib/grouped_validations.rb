@@ -75,8 +75,8 @@ end
 
 ActiveRecord::Base.class_eval do
   extend GroupedValidations::ClassMethods
-  class_inheritable_accessor :validation_groups
-  class_inheritable_accessor :validation_group_selector
+  class_attribute :validation_groups
+  class_attribute :validation_group_selector
 end
 
 if ActiveRecord::VERSION::MAJOR < 3
