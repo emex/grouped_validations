@@ -64,7 +64,7 @@ module GroupedValidations
 
       validation_groups.each do |group|
         @errors = nil
-        send(:"_run_validate_#{group}_callbacks")
+        run_callbacks(:"validate_#{group}")
         grouped[group] = errors
       end
     end
@@ -75,7 +75,7 @@ module GroupedValidations
 
   def _run_group_validation_callbacks(group, context=nil)
     with_validation_context(context) do
-      send(:"_run_validate_#{group}_callbacks")
+      run_callbacks(:"validate_#{group}")
     end
   end
 
