@@ -16,7 +16,7 @@ module GroupedValidations
 
       options = args.extract_options!.dup
       unless @_current_validation_group[:with_options]
-        options.reverse_merge!(@_current_validation_group.except(:name)) 
+        options.reverse_merge!(@_current_validation_group.except(:name))
       end
 
       if options.key?(:on)
@@ -45,6 +45,8 @@ module GroupedValidations
   def groups_valid?(*groups)
     options = groups.extract_options!
     errors.clear
+    run_validations!
+
     groups.each do |group|
       raise "Validation group '#{group}' not defined" unless validation_groups.include?(group)
       _run_group_validation_callbacks(group, options[:context])
@@ -59,7 +61,7 @@ module GroupedValidations
     grouped = {}
 
     with_validation_context(context) do
-      _run_validate_callbacks
+      run_callbacks(:validate)
       grouped[nil] = errors
 
       validation_groups.each do |group|
