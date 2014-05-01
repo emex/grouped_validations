@@ -136,7 +136,7 @@ describe GroupedValidations do
     end
 
     it "should raise exception if valiation group not defined" do
-      expect { person.group_valid?(:dummy) }.should raise_exception
+      expect { person.group_valid?(:dummy) }.to raise_exception
     end
 
     it "should run all validation groups passed to groups_valid?" do
