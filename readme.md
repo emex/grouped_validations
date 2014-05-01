@@ -16,7 +16,10 @@ Compatible with (at least) Ruby:
 
 Compatible with Rails:
 
-* 4.0.x.
+* 3.0.x
+* 3.1.x
+* 3.2.x
+* 4.0.x
 
 This is _not_ yet compatible with Rails 4.1.x.
 
