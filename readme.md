@@ -116,34 +116,6 @@ For more precise control over when groups options are merged with individual val
       validates :last_name, presence: true
     end
 
-##Grouped Errors
-
-The errors for the model can be returned as a hash with the group names as the keys. If you have a number of groups, you can deal with the error messages in specific ways per group:
-
-    validation_group :name do
-      validates :first_name, presence: true
-      validates :last_name, presence: true
-    end
-
-    validates :sex, presence: true
-
-To access all errors outside of a validation group, use nil as the key:
-
-    person.grouped_errors[nil]
-
-Use the group name as the key for all errors in a particular group:
-
-    person.grouped_errors[:name]
-
-Be aware that the validations will all be run at this time. If you have just called `valid?`, then the same validations will be re-run and the current state of the object is used. You may want to consider this if your validations are expensive, time sensitive, or if you have changed the object since last calling `valid?`.
-
-You can use the `grouped_errors` method instead of `valid?` to check on a valid object like so:
-
-    # Validations all run
-    if person.grouped_errors.empty?
-      # object is valid
-    end
-
 ##Credits
 
 * Adam Meehan (http://github.com/adzap)

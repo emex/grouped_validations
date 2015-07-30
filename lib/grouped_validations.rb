@@ -72,27 +72,6 @@ module GroupedValidations
     end
   end
 
-  # TODO Remove
-  def grouped_errors(context=nil)
-    original_errors = @errors.dup if @errors
-    @errors = nil
-    grouped = {}
-
-    with_validation_context(context) do
-      run_callbacks(:validate)
-      grouped[nil] = errors
-
-      validation_groups.each do |group|
-        @errors = nil
-        run_callbacks(:"validate_#{group}")
-        grouped[group] = errors
-      end
-    end
-    grouped.values.all?(&:empty?) ? Hash.new { |h,k| {} if validation_groups.include?(k) } : grouped
-  ensure
-    @errors = original_errors
-  end
-
   def _run_global_validation_callbacks
     run_validations!
   end

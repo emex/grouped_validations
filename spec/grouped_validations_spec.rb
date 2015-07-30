@@ -220,63 +220,6 @@ describe GroupedValidations do
     end
   end
 
-  describe "#grouped_errors" do
-    before do
-      Person.class_eval do
-        validation_group :first_name_group do
-          validates_presence_of :first_name
-        end
-        validation_group :last_name_group do
-          validates_presence_of :last_name
-        end
-        validates_presence_of :sex
-      end
-    end
-
-    it 'should return hash of error hashes with validation groups as keys' do
-      errors = person.grouped_errors
-
-      errors[:first_name_group][:first_name].should eq ["can't be blank"]
-      errors[:last_name_group][:last_name].should eq ["can't be blank"]
-    end
-
-    it 'should return hash of errors for validations outside a validation group, for nil key' do
-      errors = person.grouped_errors
-      errors[nil][:sex].should == ["can't be blank"]
-    end
-
-    it 'should be empty if no errors' do
-      person.first_name = 'Dave'
-      person.last_name = 'Smith'
-      person.sex = 'Male'
-
-      person.grouped_errors.should be_empty
-    end
-
-    it 'should allow empty check on a group even when no errors for any group' do
-      person.first_name = 'Dave'
-      person.last_name = 'Smith'
-      person.sex = 'Male'
-
-      person.grouped_errors[:first_name_group].should be_empty
-      person.grouped_errors[:not_a_group].should be_nil
-    end
-
-    it 'should be empty for group with no errors while other groups have errors' do
-      person.first_name = nil
-      person.last_name = 'Smith'
-      person.sex = 'Male'
-
-      person.grouped_errors[:last_name_group].should be_empty
-    end
-
-    it "should reset errors when called many times" do
-      person.valid?(:name)
-      person.valid?(:name)
-      person.errors[:first_name].should have(1).errors
-    end
-  end
-
   context "calling valid? with a block determining the default validation group" do
     before do
       Person.class_eval do
