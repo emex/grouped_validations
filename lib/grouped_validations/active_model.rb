@@ -32,6 +32,11 @@ module ActiveModel
 
       def default_validation_group(&block)
         raise "The default_validation_group method requires a block" unless block_given?
+
+        unless include?(GroupedValidations)
+          include GroupedValidations
+        end
+
         self.validation_group_selector = block
       end
       alias default_validation_groups default_validation_group
