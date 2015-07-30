@@ -30,6 +30,12 @@ module ActiveModel
         @_current_validation_group = nil
       end
 
+      def default_validation_group(&block)
+        raise "The default_validation_group method requires a block" unless block_given?
+        self.validation_group_selector = block
+      end
+      alias default_validation_groups default_validation_group
+
     end
 
   end
