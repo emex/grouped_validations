@@ -24,7 +24,7 @@ module GroupedValidations
       if options.key?(:on)
         options = options.dup
         options[:if] = Array.wrap(options[:if])
-        options[:if] << "validation_context == :#{options[:on]}"
+        options[:if] << ->(o) { validation_context == options[:on].to_sym }
       end
       args << options
       set_callback(:"validate_#{@_current_validation_group[:name]}", *args, &block)
